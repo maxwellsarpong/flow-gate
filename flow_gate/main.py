@@ -12,6 +12,13 @@ app = typer.Typer(
     rich_markup_mode="rich",
 )
 
+__version__ = "0.1.0"
+
+def version_callback(value: bool):
+    if value:
+        typer.echo(f"FlowGate CLI version: {__version__}")
+        raise typer.Exit()
+
 def help_callback(ctx: typer.Context, value: bool):
     if value:
         typer.echo(ctx.get_help())
@@ -20,10 +27,18 @@ def help_callback(ctx: typer.Context, value: bool):
 @app.callback(context_settings={"help_option_names": []}, no_args_is_help=True)
 def main(
     ctx: typer.Context,
+    version: bool = typer.Option(
+        None,
+        "--version",
+        "-v",
+        help="Show version",
+        callback=version_callback,
+        is_eager=True,
+    ),
     help: bool = typer.Option(
         False, 
         "--help", 
-        help="", 
+        help="Show help", 
         callback=help_callback,
         is_eager=True
     )
@@ -39,7 +54,7 @@ console = Console()
 def bump(
     ctx: typer.Context,
     check: bool = typer.Option(False, "--check", help="Only check for updates without applying"),
-    help: bool = typer.Option(False, "--help", help="", callback=help_callback, is_eager=True)
+    help: bool = typer.Option(False, "--help", help="Show help", callback=help_callback, is_eager=True)
 ):
     """
     Scans project for outdated dependencies and bumps them.
@@ -49,7 +64,7 @@ def bump(
 @app.command(context_settings={"help_option_names": []})
 def changelog(
     ctx: typer.Context,
-    help: bool = typer.Option(False, "--help", help="", callback=help_callback, is_eager=True)
+    help: bool = typer.Option(False, "--help", help="Show help", callback=help_callback, is_eager=True)
 ):
     """
     Generates a structured changelog from Git commit history.
@@ -60,7 +75,7 @@ def changelog(
 def coverage(
     ctx: typer.Context,
     threshold: float = typer.Option(80.0, "--threshold", help="Minimum coverage percentage allowed"),
-    help: bool = typer.Option(False, "--help", help="", callback=help_callback, is_eager=True)
+    help: bool = typer.Option(False, "--help", help="Show help", callback=help_callback, is_eager=True)
 ):
     """
     Runs test suite and displays coverage report.
@@ -72,7 +87,7 @@ def coverage(
 @app.command(context_settings={"help_option_names": []})
 def ci_gate(
     ctx: typer.Context,
-    help: bool = typer.Option(False, "--help", help="", callback=help_callback, is_eager=True)
+    help: bool = typer.Option(False, "--help", help="Show help", callback=help_callback, is_eager=True)
 ):
     """
     Runs bump check + coverage + lint.

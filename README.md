@@ -9,9 +9,18 @@ Developer Workflow Automation CLI for Python projects.
 - **`flow-gate coverage`**: Runs your test suite, parses the coverage report, and surfaces uncovered files and functions in a clean terminal table.
 - **`flow-gate ci-gate`**: A single command that runs bump check + coverage + lint.
 
-## Installation
+## Quick Start (Installation)
 
-### From PyPI (Recommended)
+The easiest way to install FlowGate is via `curl`:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/maxwellsarpong/flow-gate/main/install.sh | bash
+```
+
+> [!NOTE]
+> Ensure that `~/.local/bin` is in your `$PATH`.
+
+## Installation (Manual)
 Once released, you can install the CLI directly from PyPI:
 ```bash
 pip install flow-gate
