@@ -1,4 +1,3 @@
-import pytest
 from flow_gate.bump import group_updates
 
 def test_group_updates_major():

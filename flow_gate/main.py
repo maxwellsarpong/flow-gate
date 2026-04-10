@@ -64,12 +64,13 @@ def bump(
 @app.command(context_settings={"help_option_names": []})
 def changelog(
     ctx: typer.Context,
+    output: str = typer.Option("CHANGELOG.md", "--output", "-o", help="Output file path for the changelog"),
     help: bool = typer.Option(False, "--help", help="Show help", callback=help_callback, is_eager=True)
 ):
     """
     Generates a structured changelog from Git commit history.
     """
-    run_changelog()
+    run_changelog(output_path=output)
 
 @app.command(context_settings={"help_option_names": []})
 def coverage(

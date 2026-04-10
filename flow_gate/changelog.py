@@ -55,21 +55,36 @@ def parse_commits(commit_messages: List[str]) -> Dict[str, List[str]]:
             
     return groups
 
-def run_changelog():
+def run_changelog(output_path: str = "CHANGELOG.md"):
     """
     Main entry point for the changelog command.
+    Generates a structured changelog and writes it to a file.
     """
     messages = get_commits()
     if not messages:
         return
         
     groups = parse_commits(messages)
-    
-    console.print("[bold cyan]Generated Changelog[/bold cyan]\n")
-    
+
+    # Build changelog content as a string
+    lines = []
     for group_name, items in groups.items():
         if items:
-            console.print(f"### {group_name}")
+            lines.append(f"### {group_name}")
             for item in items:
-                console.print(f"- {item}")
-            console.print("") # Whitespace
+                lines.append(f"- {item}")
+            lines.append("")  # Whitespace between sections
+
+    changelog_text = "\n".join(lines)
+
+    # Print to terminal
+    console.print("[bold cyan]Generated Changelog[/bold cyan]\n")
+    console.print(changelog_text)
+
+    # Write to file
+    try:
+        with open(output_path, "w") as f:
+            f.write(changelog_text + "\n")
+        console.print(f"[bold green]✔ Changelog written to {output_path}[/bold green]")
+    except Exception as e:
+        console.print(f"[red]Error writing changelog to file: {e}[/red]")

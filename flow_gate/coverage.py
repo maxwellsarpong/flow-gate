@@ -41,7 +41,6 @@ def display_coverage_report(data: Dict, threshold: float = 80.0):
     table.add_column("Stmts", justify="right")
     table.add_column("Miss", justify="right")
     table.add_column("Cover", justify="right")
-    table.add_column("Missing Lines", style="dim")
 
     files = data.get("files", {})
     total_percent = data.get("totals", {}).get("percent_covered", 0)
@@ -50,14 +49,11 @@ def display_coverage_report(data: Dict, threshold: float = 80.0):
         percent = stats.get("summary", {}).get("percent_covered", 0)
         color = "green" if percent >= threshold else "yellow" if percent >= 50 else "red"
         
-        missing_lines = ", ".join(map(str, stats.get("missing_lines", [])))
-        
         table.add_row(
             file_path,
             str(stats.get("summary", {}).get("num_statements", 0)),
             str(stats.get("summary", {}).get("missing_lines", 0)),
             f"[{color}]{percent:.1f}%[/{color}]",
-            missing_lines
         )
 
     console.print(table)
@@ -76,7 +72,7 @@ def run_coverage(threshold: float = 80.0):
     if data:
         success = display_coverage_report(data, threshold)
         if not success:
-            console.print("\n[bold red]FAIL: Coverage is below threshold![/bold red]")
+            console.print("\n[bold red]FAIL: Test Coverage is below threshold![/bold red]")
             return False
         return True
     return False
