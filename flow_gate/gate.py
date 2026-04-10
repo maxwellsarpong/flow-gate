@@ -1,7 +1,7 @@
 import subprocess
 from rich.console import Console
-from devflow.bump import get_outdated_packages, group_updates, display_bump_table
-from devflow.coverage import run_coverage
+from flow_gate.bump import get_outdated_packages, group_updates, display_bump_table
+from flow_gate.coverage import run_coverage
 
 console = Console()
 
@@ -37,14 +37,7 @@ def run_ci_gate():
     outdated = get_outdated_packages()
     if outdated:
         grouped = group_updates(outdated)
-        # We only fail if there are MAJOR updates, or maybe we just warn?
-        # User said "exits non-zero if anything fails". 
-        # Usually, outdated deps shouldn't fail CI unless specified.
-        # But let's follow the spirit: if something is "bump-check" and it's outdated, it might be a concern.
         display_bump_table(grouped)
-        # For CI gate, maybe we don't fail on bump unless it's a critical policy.
-        # But let's assume outdated = "fail" for this strict CLI.
-        # overall_success = False 
     
     # 2. Coverage
     console.print("\n[bold]Step 2: Coverage Check[/bold]")

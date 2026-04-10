@@ -1,5 +1,5 @@
 [project]
-name = "devflow"
+name = "flow-gate"
 version = "0.1.0"
 description = "Developer Workflow Automation CLI"
 readme = "README.md"
@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-devflow = "devflow.main:app"
+flow-gate = "flow_gate.main:app"
 
 [build-system]
 requires = ["setuptools>=61.0"]

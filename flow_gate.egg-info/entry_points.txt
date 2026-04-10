@@ -1,0 +1,2 @@
+[console_scripts]
+flow-gate = flow_gate.main:app
