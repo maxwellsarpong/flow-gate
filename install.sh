@@ -35,15 +35,23 @@ mkdir -p "$INSTALL_DIR"
 mkdir -p "$BIN_DIR"
 
 # Check if we are in a git repo or need to download
+REPO_URL="https://github.com/maxwellsarpong/flow-gate.git"
+TEMP_DIR=$(mktemp -d)
+
+# Always clean up the temp directory on exit
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
 if [ -f "pyproject.toml" ] && [ -d "flow_gate" ]; then
     echo -e "Installing from local source..."
     SOURCE_DIR=$(pwd)
 else
     echo -e "Downloading source from GitHub..."
-    # Placeholder for remote download logic
-    # In a real scenario, we would git clone or download a zip
-    echo -e "${RED}Error: Remote installation not yet configured. Please run from within the repository.${NC}"
-    exit 1
+    if ! command -v git &> /dev/null; then
+        echo -e "${RED}Error: git is not installed. Please install git and try again.${NC}"
+        exit 1
+    fi
+    git clone --depth 1 "$REPO_URL" "$TEMP_DIR"
+    SOURCE_DIR="$TEMP_DIR"
 fi
 
 # Create virtual environment
@@ -53,14 +61,14 @@ source "$INSTALL_DIR/venv/bin/activate"
 
 # Install package
 echo -e "Installing dependencies..."
-pip install --upgrade pip
-pip install -e "$SOURCE_DIR"
+pip install --upgrade pip --quiet
+pip install "$SOURCE_DIR" --quiet
 
 # Create symbolic link
 echo -e "Creating symbolic link in $BIN_DIR..."
 ln -sf "$INSTALL_DIR/venv/bin/flow-gate" "$BIN_DIR/flow-gate"
 
-echo -e "${GREEN}Installation successful!${NC}"
+echo -e "${GREEN}✔ Installation successful!${NC}"
 echo -e "You can now run: ${BLUE}flow-gate --version${NC}"
 
 # Check if BIN_DIR is in PATH
