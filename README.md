@@ -21,7 +21,7 @@ curl -sSL https://raw.githubusercontent.com/maxwellsarpong/flow-gate/main/instal
 > Ensure that `~/.local/bin` is in your `$PATH`.
 
 ## Installation (Manual)
-Once released, you can install the CLI directly from PyPI:
+Install the CLI directly from PyPI:
 ```bash
 pip install flow-gate
 ```
@@ -29,7 +29,7 @@ pip install flow-gate
 ### From Source (Development)
 For local development:
 ```bash
-git clone https://github.com/yourusername/flow-gate.git
+git clone https://github.com/maxwellsarpong/flow-gate.git
 cd flow-gate
 pip install -e .
 ```
