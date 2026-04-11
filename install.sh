@@ -25,7 +25,7 @@ if [ "$(printf '%s\n' "$REQUIRED_VERSION" "$PYTHON_VERSION" | sort -V | head -n1
 fi
 
 # Set installation directory
-INSTALL_DIR="$HOME/.flow-gate"
+INSTALL_DIR="$HOME/.flowgate-cli"
 BIN_DIR="$HOME/.local/bin"
 
 echo -e "${BLUE}Installing to $INSTALL_DIR...${NC}"
@@ -41,7 +41,7 @@ TEMP_DIR=$(mktemp -d)
 # Always clean up the temp directory on exit
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
-if [ -f "pyproject.toml" ] && [ -d "flow_gate" ]; then
+if [ -f "pyproject.toml" ] && [ -d "flowgate_cli" ]; then
     echo -e "Installing from local source..."
     SOURCE_DIR=$(pwd)
 else
@@ -66,10 +66,10 @@ pip install "$SOURCE_DIR" --quiet
 
 # Create symbolic link
 echo -e "Creating symbolic link in $BIN_DIR..."
-ln -sf "$INSTALL_DIR/venv/bin/flow-gate" "$BIN_DIR/flow-gate"
+ln -sf "$INSTALL_DIR/venv/bin/flowgate-cli" "$BIN_DIR/flowgate-cli"
 
 echo -e "${GREEN}✔ Installation successful!${NC}"
-echo -e "You can now run: ${BLUE}flow-gate --version${NC}"
+echo -e "You can now run: ${BLUE}flowgate-cli --version${NC}"
 
 # Check if BIN_DIR is in PATH
 if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then

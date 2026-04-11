@@ -5,3 +5,7 @@ __pycache__
 coverage.json
 *.egg-info/
 .ruff_cache
+flow_gate.egg-info/
+test_regex.py
+dist/
+flow_gate.egg-info

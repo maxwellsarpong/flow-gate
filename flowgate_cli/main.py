@@ -1,9 +1,9 @@
 import typer
 from rich.console import Console
-from flow_gate.bump import run_bump
-from flow_gate.changelog import run_changelog
-from flow_gate.coverage import run_coverage
-from flow_gate.gate import run_ci_gate
+from flowgate_cli.bump import run_bump
+from flowgate_cli.changelog import run_changelog
+from flowgate_cli.coverage import run_coverage
+from flowgate_cli.gate import run_ci_gate
 
 app = typer.Typer(
     help="Developer Workflow Automation CLI",
@@ -54,12 +54,19 @@ console = Console()
 def bump(
     ctx: typer.Context,
     check: bool = typer.Option(False, "--check", help="Only check for updates without applying"),
+    package: str = typer.Option(None, "--package", "-p", help="Specific package to bump"),
+    version: str = typer.Option(None, "--version", "-v", help="Specific version to bump the package to"),
     help: bool = typer.Option(False, "--help", help="Show help", callback=help_callback, is_eager=True)
 ):
     """
     Scans project for outdated dependencies and bumps them.
+    If --package and --version are provided, bumps that specific package to the target version.
     """
-    run_bump(check=check)
+    if (package and not version) or (version and not package):
+        console.print("[red]Both --package and --version must be provided together.[/red]")
+        raise typer.Exit(code=1)
+        
+    run_bump(check=check, package=package, target_version=version)
 
 @app.command(context_settings={"help_option_names": []})
 def changelog(

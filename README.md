@@ -4,10 +4,10 @@ Developer Workflow Automation CLI for Python projects.
 
 ## Features
 
-- **`flow-gate bump`**: Scans your project for outdated dependencies and bumps them automatically, grouped by patch / minor / major.
-- **`flow-gate changelog`**: Reads your Git commit history and generates a structured changelog grouped by feat / fix / chore.
-- **`flow-gate coverage`**: Runs your test suite, parses the coverage report, and surfaces uncovered files and functions in a clean terminal table.
-- **`flow-gate ci-gate`**: A single command that runs bump check + coverage + lint.
+- **`flowgate-cli bump`**: Scans your project for outdated dependencies and bumps them automatically, grouped by patch / minor / major.
+- **`flowgate-cli changelog`**: Reads your Git commit history and generates a structured changelog grouped by feat / fix / chore.
+- **`flowgate-cli coverage`**: Runs your test suite, parses the coverage report, and surfaces uncovered files and functions in a clean terminal table.
+- **`flowgate-cli ci-gate`**: A single command that runs bump check + coverage + lint.
 
 ## Quick Start (Installation)
 
@@ -23,7 +23,7 @@ curl -sSL https://raw.githubusercontent.com/maxwellsarpong/flow-gate/main/instal
 ## Installation (Manual)
 Install the CLI directly from PyPI:
 ```bash
-pip install flow-gate
+pip install flowgate-cli
 ```
 
 ### From Source (Development)
@@ -38,20 +38,27 @@ pip install -e .
 
 ### Bump Dependencies
 ```bash
-flow-gate bump --check
+# Check for outdated dependencies
+flowgate-cli bump --check
+
+# Bump a specific package to a target version
+flowgate-cli bump --package requests --version 2.31.0
+
+# Shorthand for specific package bump
+flowgate-cli bump -p requests -v 2.31.0
 ```
 
 ### Generate Changelog
 ```bash
-flow-gate changelog
+flowgate-cli changelog
 ```
 
 ### Run Coverage
 ```bash
-flow-gate coverage --threshold 80
+flowgate-cli coverage --threshold 80
 ```
 
 ### CI Gate
 ```bash
-flow-gate ci-gate
+flowgate-cli ci-gate
 ```

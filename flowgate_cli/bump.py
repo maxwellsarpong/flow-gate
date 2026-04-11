@@ -70,10 +70,44 @@ def display_bump_table(grouped: Dict[str, List[Dict]]):
     else:
         console.print("[green]All dependencies are up to date! ✨[/green]")
 
-def run_bump(check: bool = False):
+def run_bump(check: bool = False, package: str = None, target_version: str = None):
     """
     Main entry point for the bump command.
     """
+    if package and target_version:
+        import os
+        import re
+        updated = False
+        files_to_check = ["pyproject.toml", "requirements.txt"]
+        
+        for file_path in files_to_check:
+            if os.path.exists(file_path):
+                with open(file_path, "r") as f:
+                    content = f.read()
+                
+                # Match "pkg>=1.0" or 'pkg==1.0'
+                pattern = re.compile(rf'([\'"]{re.escape(package)}(?:\[.*?\])?)([=><~^]+.*?)?([\'"])')
+                
+                def replacer(match):
+                    prefix = match.group(1)
+                    operator = match.group(2) if match.group(2) else "=="
+                    op_match = re.match(r'^([=><~^]+)', operator)
+                    op = op_match.group(1) if op_match else "=="
+                    quote = match.group(3)
+                    return f"{prefix}{op}{target_version}{quote}"
+                
+                new_content = pattern.sub(replacer, content)
+                
+                if new_content != content:
+                    with open(file_path, "w") as f:
+                        f.write(new_content)
+                    console.print(f"[green]Successfully bumped {package} to {target_version} in {file_path}! ✨[/green]")
+                    updated = True
+        
+        if not updated:
+            console.print(f"[red]Could not find or update {package} in project files.[/red]")
+        return
+
     outdated = get_outdated_packages()
     grouped = group_updates(outdated)
     display_bump_table(grouped)

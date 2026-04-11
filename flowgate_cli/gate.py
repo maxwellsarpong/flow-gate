@@ -1,7 +1,7 @@
 import subprocess
 from rich.console import Console
-from flow_gate.bump import get_outdated_packages, group_updates, display_bump_table
-from flow_gate.coverage import run_coverage
+from flowgate_cli.bump import get_outdated_packages, group_updates, display_bump_table
+from flowgate_cli.coverage import run_coverage
 
 console = Console()
 
