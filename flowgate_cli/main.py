@@ -60,10 +60,10 @@ def bump(
 ):
     """
     Scans project for outdated dependencies and bumps them.
-    If --package and --version are provided, bumps that specific package to the target version.
+    If --package is provided without --version, it bumps to the latest version of that package.
     """
-    if (package and not version) or (version and not package):
-        console.print("[red]Both --package and --version must be provided together.[/red]")
+    if version and not package:
+        console.print("[red]If --version is provided, --package must also be provided.[/red]")
         raise typer.Exit(code=1)
         
     run_bump(check=check, package=package, target_version=version)

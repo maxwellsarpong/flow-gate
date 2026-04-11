@@ -41,6 +41,9 @@ pip install -e .
 # Check for outdated dependencies
 flowgate-cli bump --check
 
+# Bump a specific package to the latest version automatically
+flowgate-cli bump --package requests
+
 # Bump a specific package to a target version
 flowgate-cli bump --package requests --version 2.31.0
 

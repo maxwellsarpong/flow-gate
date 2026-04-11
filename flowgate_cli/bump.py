@@ -74,7 +74,31 @@ def run_bump(check: bool = False, package: str = None, target_version: str = Non
     """
     Main entry point for the bump command.
     """
-    if package and target_version:
+    if package:
+        if not target_version:
+            console.print(f"[blue]No target version provided for {package}. Fetching the latest version...[/blue]")
+            import subprocess
+            try:
+                res = subprocess.run(
+                    ["python3", "-m", "pip", "index", "versions", package], 
+                    capture_output=True, 
+                    text=True
+                )
+                for line in res.stdout.split('\n'):
+                    if "Available versions:" in line:
+                        versions = line.split(":", 1)[1].strip().split(",")
+                        if versions:
+                            target_version = versions[0].strip()
+                            break
+            except Exception:
+                pass
+            
+            if not target_version:
+                console.print(f"[red]Could not determine the latest version for {package}. Please provide it explicitly with --version.[/red]")
+                return
+                
+            console.print(f"[green]Found latest version for {package}: {target_version}[/green]")
+
         import os
         import re
         updated = False
@@ -85,16 +109,17 @@ def run_bump(check: bool = False, package: str = None, target_version: str = Non
                 with open(file_path, "r") as f:
                     content = f.read()
                 
-                # Match "pkg>=1.0" or 'pkg==1.0'
-                pattern = re.compile(rf'([\'"]{re.escape(package)}(?:\[.*?\])?)([=><~^]+.*?)?([\'"])')
+                # Match "pkg>=1.0", 'pkg==1.0', or unquoted pkg==1.0
+                pattern = re.compile(rf'(^|[\'"]|[^a-zA-Z0-9_-])({re.escape(package)}(?:\[.*?\])?)([=><~^]+[a-zA-Z0-9_.-]*)?([\'"]|\s|$)', re.MULTILINE)
                 
                 def replacer(match):
                     prefix = match.group(1)
-                    operator = match.group(2) if match.group(2) else "=="
+                    pkg = match.group(2)
+                    operator = match.group(3) if match.group(3) else "=="
                     op_match = re.match(r'^([=><~^]+)', operator)
                     op = op_match.group(1) if op_match else "=="
-                    quote = match.group(3)
-                    return f"{prefix}{op}{target_version}{quote}"
+                    suffix = match.group(4)
+                    return f"{prefix}{pkg}{op}{target_version}{suffix}"
                 
                 new_content = pattern.sub(replacer, content)
                 
