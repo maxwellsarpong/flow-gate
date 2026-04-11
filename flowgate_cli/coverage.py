@@ -12,7 +12,6 @@ def run_pytest_coverage(source: str = "."):
     Runs pytest with coverage and generates a JSON report.
     """
     try:
-        # Run pytest with coverage
         result = subprocess.run(
             ["pytest", f"--cov={source}", "--cov-report=json", "--cov-report=term-missing"],
             capture_output=True,
