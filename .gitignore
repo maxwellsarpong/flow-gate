@@ -10,3 +10,4 @@ test_regex.py
 dist/
 flow_gate.egg-info
 .DS_Store
+*.pyc
