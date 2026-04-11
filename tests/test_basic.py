@@ -1,4 +1,4 @@
-from flow_gate.bump import group_updates
+from flowgate_cli.bump import group_updates
 
 def test_group_updates_major():
     outdated = [{"name": "fake", "version": "1.0.0", "latest_version": "2.0.0"}]
