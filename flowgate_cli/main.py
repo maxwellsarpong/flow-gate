@@ -83,12 +83,13 @@ def changelog(
 def coverage(
     ctx: typer.Context,
     threshold: float = typer.Option(80.0, "--threshold", help="Minimum coverage percentage allowed"),
+    source: str = typer.Option(".", "--source", "-s", help="Source directory or module to measure coverage for"),
     help: bool = typer.Option(False, "--help", help="Show help", callback=help_callback, is_eager=True)
 ):
     """
     Runs test suite and displays coverage report.
     """
-    success = run_coverage(threshold=threshold)
+    success = run_coverage(threshold=threshold, source=source)
     if not success:
         raise typer.Exit(code=1)
 

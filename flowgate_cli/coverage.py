@@ -7,20 +7,26 @@ from rich.table import Table
 
 console = Console()
 
-def run_pytest_coverage():
+def run_pytest_coverage(source: str = "."):
     """
     Runs pytest with coverage and generates a JSON report.
     """
     try:
         # Run pytest with coverage
-        subprocess.run(
-            ["pytest", "--cov=.", "--cov-report=json", "--cov-report=term-missing"],
+        result = subprocess.run(
+            ["pytest", f"--cov={source}", "--cov-report=json", "--cov-report=term-missing"],
             capture_output=True,
             text=True
         )
         
         if not os.path.exists("coverage.json"):
             console.print("[red]Coverage report (coverage.json) not found.[/red]")
+            console.print("[yellow]This usually happens if tests fail to run or if 'pytest-cov' is not installed.[/yellow]")
+            console.print("\n[bold]Pytest Output:[/bold]")
+            console.print(result.stdout)
+            if result.stderr:
+                console.print("\n[bold red]Pytest Errors:[/bold red]")
+                console.print(result.stderr)
             return None
             
         with open("coverage.json", "r") as f:
@@ -63,12 +69,12 @@ def display_coverage_report(data: Dict, threshold: float = 80.0):
     
     return total_percent >= threshold
 
-def run_coverage(threshold: float = 80.0):
+def run_coverage(threshold: float = 80.0, source: str = "."):
     """
     Main entry point for the coverage command.
     """
-    console.print("[bold blue]Starting test suite with coverage...[/bold blue]")
-    data = run_pytest_coverage()
+    console.print(f"[bold blue]Starting test suite with coverage for source: '{source}'...[/bold blue]")
+    data = run_pytest_coverage(source)
     if data:
         success = display_coverage_report(data, threshold)
         if not success:

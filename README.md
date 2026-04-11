@@ -58,7 +58,12 @@ flowgate-cli changelog
 
 ### Run Coverage
 ```bash
+# Run coverage across all files
 flowgate-cli coverage --threshold 80
+
+# Measure coverage for a specific source directory or package
+flowgate-cli coverage --source flowgate_cli
+flowgate-cli coverage -s src --threshold 90
 ```
 
 ### CI Gate
