@@ -14,7 +14,7 @@ Developer Workflow Automation CLI for Python projects.
 The easiest way to install FlowGate is via `curl`:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/maxwellsarpong/flow-gate/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/maxwellsarpong/flowgate-cli/main/install.sh | bash
 ```
 
 > [!NOTE]
@@ -29,8 +29,8 @@ pip install flowgate-cli
 ### From Source (Development)
 For local development:
 ```bash
-git clone https://github.com/maxwellsarpong/flow-gate.git
-cd flow-gate
+git clone https://github.com/maxwellsarpong/flowgate-cli.git
+cd flowgate-cli
 pip install -e .
 ```
 
