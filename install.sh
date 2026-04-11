@@ -35,7 +35,7 @@ mkdir -p "$INSTALL_DIR"
 mkdir -p "$BIN_DIR"
 
 # Check if we are in a git repo or need to download
-REPO_URL="https://github.com/maxwellsarpong/flow-gate.git"
+REPO_URL="https://github.com/maxwellsarpong/flowgate-cli.git"
 TEMP_DIR=$(mktemp -d)
 
 # Always clean up the temp directory on exit
