@@ -6,6 +6,9 @@
 - resolve import error
 
 ### Maintenance
+- Enhance the coverage check to support external projects
+- Add pytest, pytest-cov package bundled in pyproject.toml
+- Enhance the test coverage check
 - Set the default value of the run_bump to latest
 - Update the readme with correct project url
 - Remove tracked .DS_Store and __pycache__ files

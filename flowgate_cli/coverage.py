@@ -12,6 +12,14 @@ def run_pytest_coverage(source: str = "."):
     Runs pytest with coverage and generates a JSON report.
     """
     try:
+        # Ensure pytest and pytest-cov are installed in the active environment on the fly
+        console.print("[dim]Checking for pytest and pytest-cov in the project environment...[/dim]")
+        check_result = subprocess.run(["pip", "show", "pytest-cov"], capture_output=True, text=True)
+        if check_result.returncode != 0:
+            console.print("[yellow]pytest-cov is missing. Auto-installing dependencies on the fly...[/yellow]")
+            subprocess.run(["pip", "install", "pytest", "pytest-cov", "--quiet"], check=True)
+
+        # Run pytest with coverage using the project's environment (via PATH)
         result = subprocess.run(
             ["pytest", f"--cov={source}", "--cov-report=json", "--cov-report=term-missing"],
             capture_output=True,
@@ -21,11 +29,16 @@ def run_pytest_coverage(source: str = "."):
         if not os.path.exists("coverage.json"):
             console.print("[red]Coverage report (coverage.json) not found.[/red]")
             console.print("[yellow]This usually happens if tests fail to run or if 'pytest-cov' is not installed.[/yellow]")
-            console.print("\n[bold]Pytest Output:[/bold]")
-            console.print(result.stdout)
-            if result.stderr:
-                console.print("\n[bold red]Pytest Errors:[/bold red]")
-                console.print(result.stderr)
+            if result.stderr and "unrecognized arguments" in result.stderr and "--cov" in result.stderr:
+                console.print("\n[bold red]ERROR: 'pytest-cov' plugin is missing in this environment![/bold red]")
+                console.print("[yellow]Please install it in your project by running:[/yellow]")
+                console.print("    pip install pytest-cov")
+            else:
+                console.print("\n[bold]Pytest Output:[/bold]")
+                console.print(result.stdout)
+                if result.stderr:
+                    console.print("\n[bold red]Pytest Errors:[/bold red]")
+                    console.print(result.stderr)
             return None
             
         with open("coverage.json", "r") as f:
